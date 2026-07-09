@@ -118,6 +118,15 @@
     font-weight:600;
   }
   .match-meta .stage{ color: var(--gold); }
+  .live-tag{
+    background: var(--live-red);
+    color: #fff;
+    font-size: 9.5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    letter-spacing: 0.04em;
+  }
 
   .teams-row{
     display:grid;
@@ -350,11 +359,32 @@
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const MATCHES = [
-    { id:'m1', stage:'Quarter-final · Jul 9', venue:'Foxborough', a:{code:'MAR',name:'Morocco',flag:'🇲🇦'}, b:{code:'FRA',name:'France',flag:'🇫🇷'} },
-    { id:'m2', stage:'Quarter-final · Jul 10', venue:'Inglewood', a:{code:'ESP',name:'Spain',flag:'🇪🇸'}, b:{code:'BEL',name:'Belgium',flag:'🇧🇪'} },
-    { id:'m3', stage:'Quarter-final · Jul 11', venue:'Miami Gardens', a:{code:'NOR',name:'Norway',flag:'🇳🇴'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'} },
-    { id:'m4', stage:'Quarter-final · Jul 11', venue:'Kansas City', a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'SUI',name:'Switzerland',flag:'🇨🇭'} }
+    { id:'m1', stage:'Quarter-final', kickoff:'2026-07-09T20:00:00Z', venue:'Foxborough', a:{code:'MAR',name:'Morocco',flag:'🇲🇦'}, b:{code:'FRA',name:'France',flag:'🇫🇷'} },
+    { id:'m2', stage:'Quarter-final', kickoff:'2026-07-10T19:00:00Z', venue:'Inglewood', a:{code:'ESP',name:'Spain',flag:'🇪🇸'}, b:{code:'BEL',name:'Belgium',flag:'🇧🇪'} },
+    { id:'m3', stage:'Quarter-final', kickoff:'2026-07-11T21:00:00Z', venue:'Miami Gardens', a:{code:'NOR',name:'Norway',flag:'🇳🇴'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'} },
+    { id:'m4', stage:'Quarter-final', kickoff:'2026-07-12T01:00:00Z', venue:'Kansas City', a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'SUI',name:'Switzerland',flag:'🇨🇭'} }
   ];
+
+  function formatKickoff(iso){
+    const d = new Date(iso);
+    const now = new Date();
+    const diffMs = d - now;
+    const dateStr = d.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
+    const timeStr = d.toLocaleTimeString(undefined, { hour:'numeric', minute:'2-digit' });
+    if (diffMs <= 0 && diffMs > -3 * 60 * 60 * 1000){
+      return { label: `${dateStr} · ${timeStr} · likely live`, live:true };
+    }
+    if (diffMs <= 0){
+      return { label: `${dateStr} · ${timeStr} · finished`, live:false };
+    }
+    const hrs = Math.floor(diffMs / (1000*60*60));
+    const days = Math.floor(hrs / 24);
+    let countdown;
+    if (days >= 1) countdown = `in ${days}d ${hrs % 24}h`;
+    else if (hrs >= 1) countdown = `in ${hrs}h`;
+    else countdown = `in ${Math.floor(diffMs/(1000*60))}m`;
+    return { label: `${dateStr} · ${timeStr} · ${countdown}`, live:false };
+  }
 
   const PLAYERS = [
     { id:'p1', name:'Mbappé' }, { id:'p2', name:'Haaland' }, { id:'p3', name:'Messi' },
@@ -442,11 +472,15 @@
       const pctB = 100 - pctA;
 
       const myVote = localStorage.getItem(myVoteKey('match', m.id));
+      const kickoff = formatKickoff(m.kickoff);
 
       const card = document.createElement('div');
       card.className = 'match-card';
       card.innerHTML = `
-        <div class="match-meta"><span class="stage">${m.stage}</span><span>${m.venue}</span></div>
+        <div class="match-meta">
+          <span class="stage">${m.stage}${kickoff.live ? ' <span class=\"live-tag\">LIVE</span>' : ''}</span>
+          <span>${kickoff.label} · ${m.venue}</span>
+        </div>
         <div class="teams-row">
           <div class="team-btn ${myVote==='a' ? 'voted':''}" data-side="a" data-id="${m.id}">
             <span class="team-flag">${m.a.flag}</span>
