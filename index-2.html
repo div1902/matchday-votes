@@ -383,6 +383,550 @@
   // Simple row-per-key store backed by Supabase: table "votes" (id text, count int)
   async function getRowValue(id, fallback){
     const { data, error } = await sb.from('votes').select('count').eq('id', id).maybeSingle();
+    if (error){
+      console.error('Supabase read error for id=' + id + ':', JSON.stringify(error, null, 2));
+      return fallback;
+    }
+    if (!data) return fallback;
+    return data.count;
+  }
+
+  async function setRowValue(id, value){
+    const { error } = await sb.from('votes').upsert({ id, count: value }, { onConflict: 'id' });
+    if (error){
+      console.error('Supabase write error for id=' + id + ':', JSON.stringify(error, null, 2));
+      showToast('Vote failed — try again');
+    }
+  }
+
+  async function ensureSeed(){ /* seeding now happens once via the SQL setup script */ }
+
+  async function getCount(key, fallback){
+    if (typeof fallback === 'object' && fallback !== null && 'a' in fallback){
+      const a = await getRowValue(key + '_a', fallback.a);
+      const b = await getRowValue(key + '_b', fallback.b);
+      return { a, b };
+    }
+    if (typeof fallback === 'object' && fallback !== null && 'sum' in fallback){
+      const sum = await getRowValue(key + '_sum', fallback.sum);
+      const count = await getRowValue(key + '_count', fallback.count);
+      return { sum, count };
+    }
+    return await getRowValue(key, fallback);
+  }
+
+  async function incrementVote(key, current){
+    const next = current + 1;
+    await setRowValue(key, next);
+    return next;
+  }
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  }
+
+  async function renderMatches(){
+    const container = document.getElementById('matchList');
+    container.innerHTML = '';
+    let grandTotal = 0;
+
+    for (const m of MATCHES){
+      const storeKey = `match_${m.id}`;
+      const counts = await getCount(storeKey, { a:0, b:0 });
+      const total = counts.a + counts.b;
+      grandTotal += total;
+      const pctA = total > 0 ? Math.round((counts.a/total)*100) : 50;
+      const pctB = 100 - pctA;
+
+      const myVote = localStorage.getItem(myVoteKey('match', m.id));
+
+      const card = document.createElement('div');
+      card.className = 'match-card';
+      card.innerHTML = `
+        <div class="match-meta"><span class="stage">${m.stage}</span><span>${m.venue}</span></div>
+        <div class="teams-row">
+          <div class="team-btn ${myVote==='a' ? 'voted':''}" data-side="a" data-id="${m.id}">
+            <span class="team-flag">${m.a.flag}</span>
+            <span class="team-name">${m.a.name}</span>
+          </div>
+          <div class="vs-mid">VS</div>
+          <div class="team-btn ${myVote==='b' ? 'voted':''}" data-side="b" data-id="${m.id}">
+            <span class="team-flag">${m.b.flag}</span>
+            <span class="team-name">${m.b.name}</span>
+          </div>
+        </div>
+        <div class="result-bar-wrap">
+          <div class="result-bar">
+            <div class="result-seg a" style="width:${pctA}%">${pctA >= 12 ? pctA+'%' : ''}</div>
+            <div class="result-seg b" style="width:${pctB}%">${pctB >= 12 ? pctB+'%' : ''}</div>
+          </div>
+          <div class="vote-count-row">
+            <span>${m.a.name} · ${counts.a} votes</span>
+            <span>${m.b.name} · ${counts.b} votes</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="fan-pick"><span class="crown">${total > 0 ? '★' : ''}</span>${total > 0 ? (pctA >= pctB ? m.a.name : m.b.name) + ' favored by fans' : 'Be the first to vote'}</span>
+          <span>${total} total</span>
+        </div>
+      `;
+      container.appendChild(card);
+    }
+
+    document.getElementById('totalVotes').textContent = grandTotal.toLocaleString();
+
+    container.querySelectorAll('.team-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleMatchVote(btn.dataset.id, btn.dataset.side));
+    });
+  }
+
+  async function handleMatchVote(matchId, side){
+    const voteKey = myVoteKey('match', matchId);
+    const existing = localStorage.getItem(voteKey);
+    if (existing === side) return; // already voted this way
+
+    const storeKey = `match_${matchId}`;
+    const counts = await getCount(storeKey, { a:0, b:0 });
+
+    if (existing && existing !== side){
+      counts[existing] = Math.max(0, counts[existing] - 1);
+      await setRowValue(storeKey + '_' + existing, counts[existing]);
+    }
+    counts[side] = (counts[side] || 0) + 1;
+    await setRowValue(storeKey + '_' + side, counts[side]);
+
+    localStorage.setItem(voteKey, side);
+
+    const m = MATCHES.find(x => x.id === matchId);
+    const teamName = side === 'a' ? m.a.name : m.b.name;
+    showToast(`Vote counted — ${teamName}`);
+
+    renderMatches();
+  }
+
+  async function renderPlayers(){
+    const grid = document.getElementById('playerGrid');
+    grid.innerHTML = '';
+
+    for (const p of PLAYERS){
+      const storeKey = `player_${p.id}`;
+      const count = await getCount(storeKey, 0);
+      const myVote = localStorage.getItem(myVoteKey('player', p.id));
+
+      const chip = document.createElement('div');
+      chip.className = `player-chip ${myVote ? 'voted':''}`;
+      chip.dataset.id = p.id;
+      chip.innerHTML = `<span class="pname">${p.name}</span><span class="pvotes">${count}</span>`;
+      chip.addEventListener('click', () => handlePlayerVote(p.id));
+      grid.appendChild(chip);
+    }
+  }
+
+  async function handlePlayerVote(playerId){
+    const voteKey = myVoteKey('player', playerId);
+    if (localStorage.getItem(voteKey)) return;
+
+    const storeKey = `player_${playerId}`;
+    const count = await getCount(storeKey, 0);
+    await incrementVote(storeKey, count);
+    localStorage.setItem(voteKey, '1');
+
+    const p = PLAYERS.find(x => x.id === playerId);
+    showToast(`Vote counted — ${p.name}`);
+    renderPlayers();
+  }
+
+  async function renderXg(){
+    const panel = document.getElementById('xgPanel');
+    panel.innerHTML = '';
+
+    for (const t of XG_TEAMS){
+      const storeKey = `xg_${t.id}`;
+      const data = await getCount(storeKey, { sum:0, count:0 });
+      const avg = data.count > 0 ? (data.sum / data.count) : 0;
+      const pct = Math.min(100, (avg / 4) * 100);
+
+      const row = document.createElement('div');
+      row.className = 'xg-row';
+      row.innerHTML = `
+        <span class="xg-label">${t.name}</span>
+        <div class="xg-track"><div class="xg-fill" style="width:${pct}%"></div></div>
+        <span class="xg-val">${avg.toFixed(1)}</span>
+      `;
+      panel.appendChild(row);
+    }
+
+    const note = document.createElement('div');
+    note.style.cssText = 'margin-top:14px; font-size:11.5px; color:var(--text-faint);';
+    note.textContent = 'Average of every fan-submitted goal prediction for each team\'s next match.';
+    panel.appendChild(note);
+  }
+
+  async function init(){
+    await renderMatches();
+    await renderPlayers();
+    await renderXg();
+  }
+
+  init();
+
+  // light auto-refresh so votes from other people appear without a manual reload
+  setInterval(() => { renderMatches(); renderPlayers(); renderXg(); }, 15000);
+</script>
+
+</body>
+</html>      repeating-linear-gradient(180deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 44px),
+      var(--bg);
+  }
+
+  .wrap{ max-width: 680px; margin:0 auto; padding: 48px 20px 80px; }
+
+  header{ text-align:center; margin-bottom: 36px; }
+
+  .live-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background: rgba(255,71,71,0.1);
+    border: 0.5px solid rgba(255,71,71,0.35);
+    padding: 5px 13px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--live-red);
+    margin-bottom: 22px;
+  }
+  .live-dot{
+    width:7px; height:7px; border-radius:50%;
+    background: var(--live-red);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.4; transform:scale(0.8); }
+  }
+
+  h1{
+    font-family:'Bebas Neue', sans-serif;
+    font-weight:400;
+    font-size: 52px;
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    color: var(--white);
+  }
+  h1 span{ color: var(--green); }
+
+  header p{
+    margin-top:14px;
+    color: var(--text-dim);
+    font-size: 14.5px;
+    max-width: 420px;
+    margin-left:auto; margin-right:auto;
+    line-height: 1.55;
+  }
+
+  .total-strip{
+    display:flex;
+    justify-content:center;
+    gap: 28px;
+    margin-top: 24px;
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+  .total-strip b{ color: var(--gold); font-weight:600; }
+
+  /* ---- match cards ---- */
+  .matches{ display:grid; gap: 16px; }
+
+  .match-card{
+    background: var(--panel);
+    border: 0.5px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 20px 18px;
+  }
+
+  .match-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom: 16px;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight:600;
+  }
+  .match-meta .stage{ color: var(--gold); }
+
+  .teams-row{
+    display:grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items:center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .team-btn{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    background: var(--panel-2);
+    border: 0.5px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 10px;
+    cursor:pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+  .team-btn:hover{ border-color: var(--green); background: rgba(61,220,122,0.05); }
+  .team-btn:active{ transform: scale(0.97); }
+  .team-btn.voted{
+    border-color: var(--green);
+    background: rgba(61,220,122,0.09);
+  }
+  .team-flag{ font-size: 28px; line-height:1; }
+  .team-name{ font-size: 13.5px; font-weight:600; }
+  .team-btn.voted .team-name{ color: var(--green); }
+
+  .vs-mid{
+    font-family:'Bebas Neue', sans-serif;
+    font-size: 15px;
+    color: var(--text-faint);
+    text-align:center;
+    padding: 0 2px;
+  }
+
+  .result-bar-wrap{ margin-bottom: 8px; }
+  .result-bar{
+    display:flex;
+    height: 26px;
+    border-radius: 6px;
+    overflow:hidden;
+    background: var(--panel-2);
+    border: 0.5px solid var(--line);
+  }
+  .result-seg{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 11.5px;
+    font-weight:700;
+    color: var(--bg);
+    transition: width 0.7s cubic-bezier(.2,.8,.2,1);
+    white-space:nowrap;
+    overflow:hidden;
+  }
+  .result-seg.a{ background: var(--green); }
+  .result-seg.b{ background: var(--gold); }
+
+  .vote-count-row{
+    display:flex;
+    justify-content:space-between;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    margin-top: 6px;
+  }
+
+  .card-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-top: 0.5px solid var(--line);
+    padding-top: 12px;
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--text-faint);
+  }
+
+  .fan-pick{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .fan-pick .crown{ color: var(--gold); }
+
+  /* ---- best player + expected goals section ---- */
+  .section-title{
+    font-family:'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.02em;
+    margin: 40px 0 6px;
+    color: var(--white);
+  }
+  .section-sub{
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+  }
+
+  .xg-panel{
+    background: var(--panel);
+    border: 0.5px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 20px;
+  }
+
+  .xg-row{
+    display:grid;
+    grid-template-columns: 90px 1fr 40px;
+    align-items:center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .xg-row:last-child{ margin-bottom:0; }
+  .xg-label{ font-size: 13px; font-weight:600; color: var(--text-dim); }
+  .xg-track{
+    height: 8px;
+    background: var(--panel-2);
+    border-radius: 5px;
+    overflow:hidden;
+  }
+  .xg-fill{
+    height:100%;
+    border-radius:5px;
+    background: linear-gradient(90deg, var(--green-dim), var(--green));
+    transition: width 0.7s ease;
+  }
+  .xg-val{ font-size:13px; font-weight:700; color: var(--gold); text-align:right; }
+
+  .player-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .player-chip{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background: var(--panel-2);
+    border: 0.5px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 13px;
+    cursor:pointer;
+    transition: border-color 0.15s ease;
+    font-size: 13px;
+  }
+  .player-chip:hover{ border-color: var(--green); }
+  .player-chip.voted{ border-color: var(--gold); background: rgba(242,201,76,0.07); }
+  .player-chip .pname{ font-weight:600; }
+  .player-chip .pvotes{ color: var(--text-faint); font-size:11.5px; }
+  .player-chip.voted .pvotes{ color: var(--gold); }
+
+  footer{
+    text-align:center;
+    margin-top: 50px;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    line-height:1.6;
+  }
+
+  .toast{
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--panel);
+    border: 0.5px solid var(--green);
+    color: var(--white);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight:500;
+    opacity: 0;
+    pointer-events:none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 50;
+  }
+  .toast.show{
+    opacity:1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width:480px){
+    h1{ font-size: 40px; }
+    .team-flag{ font-size:24px; }
+    .total-strip{ gap:16px; flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="live-pill"><span class="live-dot"></span>live voting</span>
+    <h1>Who wins the<br><span>quarter-finals?</span></h1>
+    <p>Vote on every World Cup 2026 quarterfinal. Results update live from everyone voting right now — no account needed.</p>
+    <div class="total-strip">
+      <span><b id="totalVotes">–</b> total votes</span>
+      <span><b id="totalMatches">4</b> matches live</span>
+    </div>
+  </header>
+
+  <div class="matches" id="matchList"></div>
+
+  <div class="section-title">Golden boot watch</div>
+  <div class="section-sub">Vote for who you think finishes as the tournament's best player.</div>
+  <div class="xg-panel">
+    <div class="player-grid" id="playerGrid"></div>
+  </div>
+
+  <div class="section-title">Expected goals — fan forecast</div>
+  <div class="section-sub">Not a stat feed — this is the crowd's own prediction, averaged live as people vote.</div>
+  <div class="xg-panel" id="xgPanel"></div>
+
+  <footer>Votes are stored anonymously and combined live across everyone using this page.<br>Fan-driven predictions, not official FIFA data.</footer>
+</div>
+
+<div class="toast" id="toast">Vote counted</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  // ---- Supabase connection ----
+  // Paste your values from Project Settings -> API
+  const SUPABASE_URL = "https://ibkmwgzxxhvoaswjhivr.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlia213Z3p4eGh2b2Fzd2poaXZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1ODI0NzksImV4cCI6MjA5OTE1ODQ3OX0.p3nsrQaKlsQ_IrXotUcr5kBjRxUlzhOQ4H-cqCdzKZ8";
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const MATCHES = [
+    { id:'m1', stage:'Quarter-final · Jul 9', venue:'Foxborough', a:{code:'MAR',name:'Morocco',flag:'🇲🇦'}, b:{code:'FRA',name:'France',flag:'🇫🇷'} },
+    { id:'m2', stage:'Quarter-final · Jul 10', venue:'Inglewood', a:{code:'ESP',name:'Spain',flag:'🇪🇸'}, b:{code:'BEL',name:'Belgium',flag:'🇧🇪'} },
+    { id:'m3', stage:'Quarter-final · Jul 11', venue:'Miami Gardens', a:{code:'NOR',name:'Norway',flag:'🇳🇴'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'} },
+    { id:'m4', stage:'Quarter-final · Jul 11', venue:'Kansas City', a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'SUI',name:'Switzerland',flag:'🇨🇭'} }
+  ];
+
+  const PLAYERS = [
+    { id:'p1', name:'Mbappé' }, { id:'p2', name:'Haaland' }, { id:'p3', name:'Messi' },
+    { id:'p4', name:'Yamal' }, { id:'p5', name:'Bellingham' }, { id:'p6', name:'Kane' }
+  ];
+
+  const XG_TEAMS = [
+    { id:'x1', name:'France' }, { id:'x2', name:'Norway' }, { id:'x3', name:'Argentina' }, { id:'x4', name:'Spain' }
+  ];
+
+  const VOTER_KEY = 'matchday_voter_id';
+  const SEED_KEY_PREFIX = 'seeded_v1_';
+
+  function getVoterId(){
+    let id = localStorage.getItem(VOTER_KEY);
+    if (!id){
+      id = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem(VOTER_KEY, id);
+    }
+    return id;
+  }
+  const voterId = getVoterId();
+
+  function myVoteKey(kind, itemId){ return `myvote_${kind}_${itemId}`; }
+
+  // Simple row-per-key store backed by Supabase: table "votes" (id text, count int)
+  async function getRowValue(id, fallback){
+    const { data, error } = await sb.from('votes').select('count').eq('id', id).maybeSingle();
     if (error || !data) return fallback;
     return data.count;
   }
