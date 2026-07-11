@@ -127,6 +127,37 @@
     margin-left: 6px;
     letter-spacing: 0.04em;
   }
+  .final-tag{
+    background: var(--text-faint);
+    color: var(--bg);
+    font-size: 9.5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+  }
+  .match-card.finished{
+    opacity: 0.96;
+  }
+  .team-btn.locked{
+    cursor: default;
+  }
+  .team-btn.locked:hover{
+    border-color: var(--line);
+    background: var(--panel-2);
+  }
+  .team-btn.winner{
+    border-color: var(--gold);
+    background: rgba(242,201,76,0.07);
+  }
+  .team-btn.winner .team-name{ color: var(--gold); }
+  .winner-check{
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
 
   .teams-row{
     display:grid;
@@ -359,10 +390,24 @@
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const MATCHES = [
-    { id:'m1', stage:'Quarter-final', kickoff:'2026-07-09T20:00:00Z', venue:'Foxborough', a:{code:'MAR',name:'Morocco',flag:'🇲🇦'}, b:{code:'FRA',name:'France',flag:'🇫🇷'} },
-    { id:'m2', stage:'Quarter-final', kickoff:'2026-07-10T19:00:00Z', venue:'Inglewood', a:{code:'ESP',name:'Spain',flag:'🇪🇸'}, b:{code:'BEL',name:'Belgium',flag:'🇧🇪'} },
-    { id:'m3', stage:'Quarter-final', kickoff:'2026-07-11T21:00:00Z', venue:'Miami Gardens', a:{code:'NOR',name:'Norway',flag:'🇳🇴'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'} },
-    { id:'m4', stage:'Quarter-final', kickoff:'2026-07-12T01:00:00Z', venue:'Kansas City', a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'SUI',name:'Switzerland',flag:'🇨🇭'} }
+    { id:'m1', stage:'Quarter-final', kickoff:'2026-07-09T20:00:00Z', venue:'Foxborough',
+      a:{code:'MAR',name:'Morocco',flag:'🇲🇦'}, b:{code:'FRA',name:'France',flag:'🇫🇷'},
+      result:{ a:0, b:2 } },
+    { id:'m2', stage:'Quarter-final', kickoff:'2026-07-10T19:00:00Z', venue:'Inglewood',
+      a:{code:'ESP',name:'Spain',flag:'🇪🇸'}, b:{code:'BEL',name:'Belgium',flag:'🇧🇪'},
+      result:{ a:2, b:1 } },
+    { id:'m3', stage:'Quarter-final', kickoff:'2026-07-11T21:00:00Z', venue:'Miami Gardens',
+      a:{code:'NOR',name:'Norway',flag:'🇳🇴'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+      result:null },
+    { id:'m4', stage:'Quarter-final', kickoff:'2026-07-12T01:00:00Z', venue:'Kansas City',
+      a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'SUI',name:'Switzerland',flag:'🇨🇭'},
+      result:null },
+    { id:'m5', stage:'Semi-final', kickoff:'2026-07-14T19:00:00Z', venue:'Arlington',
+      a:{code:'FRA',name:'France',flag:'🇫🇷'}, b:{code:'ESP',name:'Spain',flag:'🇪🇸'},
+      result:null },
+    { id:'m6', stage:'Semi-final', kickoff:'2026-07-15T19:00:00Z', venue:'Atlanta',
+      a:{code:'TBD',name:'Norway/England winner',flag:'❓'}, b:{code:'TBD',name:'Argentina/Switzerland winner',flag:'❓'},
+      result:null }
   ];
 
   function formatKickoff(iso){
@@ -473,23 +518,37 @@
 
       const myVote = localStorage.getItem(myVoteKey('match', m.id));
       const kickoff = formatKickoff(m.kickoff);
+      const finished = !!m.result;
+
+      let winnerSide = null;
+      let scoreLine = '';
+      if (finished){
+        if (m.result.a > m.result.b) winnerSide = 'a';
+        else if (m.result.b > m.result.a) winnerSide = 'b';
+        scoreLine = `${m.result.a} – ${m.result.b}`;
+      }
+
+      const fansCorrect = finished && winnerSide && total > 0 &&
+        ((winnerSide === 'a' && pctA >= pctB) || (winnerSide === 'b' && pctB > pctA));
 
       const card = document.createElement('div');
-      card.className = 'match-card';
+      card.className = 'match-card' + (finished ? ' finished' : '');
       card.innerHTML = `
         <div class="match-meta">
-          <span class="stage">${m.stage}${kickoff.live ? ' <span class=\"live-tag\">LIVE</span>' : ''}</span>
-          <span>${kickoff.label} · ${m.venue}</span>
+          <span class="stage">${m.stage}${kickoff.live && !finished ? ' <span class="live-tag">LIVE</span>' : ''}${finished ? ' <span class="final-tag">FINAL</span>' : ''}</span>
+          <span>${finished ? kickoff.label.split(' · likely live')[0].split(' · finished')[0] : kickoff.label} · ${m.venue}</span>
         </div>
         <div class="teams-row">
-          <div class="team-btn ${myVote==='a' ? 'voted':''}" data-side="a" data-id="${m.id}">
+          <div class="team-btn ${myVote==='a' ? 'voted':''} ${finished ? 'locked' : ''} ${winnerSide==='a' ? 'winner' : ''}" data-side="a" data-id="${m.id}">
             <span class="team-flag">${m.a.flag}</span>
             <span class="team-name">${m.a.name}</span>
+            ${winnerSide==='a' ? '<span class="winner-check">✓ Won</span>' : ''}
           </div>
-          <div class="vs-mid">VS</div>
-          <div class="team-btn ${myVote==='b' ? 'voted':''}" data-side="b" data-id="${m.id}">
+          <div class="vs-mid">${finished ? scoreLine : 'VS'}</div>
+          <div class="team-btn ${myVote==='b' ? 'voted':''} ${finished ? 'locked' : ''} ${winnerSide==='b' ? 'winner' : ''}" data-side="b" data-id="${m.id}">
             <span class="team-flag">${m.b.flag}</span>
             <span class="team-name">${m.b.name}</span>
+            ${winnerSide==='b' ? '<span class="winner-check">✓ Won</span>' : ''}
           </div>
         </div>
         <div class="result-bar-wrap">
@@ -503,7 +562,10 @@
           </div>
         </div>
         <div class="card-footer">
-          <span class="fan-pick"><span class="crown">${total > 0 ? '★' : ''}</span>${total > 0 ? (pctA >= pctB ? m.a.name : m.b.name) + ' favored by fans' : 'Be the first to vote'}</span>
+          ${finished
+            ? `<span class="fan-pick">${total > 0 ? (fansCorrect ? '✓ Fans called it right' : '✗ Fans got this one wrong') : 'No votes were cast'}</span>`
+            : `<span class="fan-pick"><span class="crown">${total > 0 ? '★' : ''}</span>${total > 0 ? (pctA >= pctB ? m.a.name : m.b.name) + ' favored by fans' : 'Be the first to vote'}</span>`
+          }
           <span>${total} total</span>
         </div>
       `;
@@ -512,7 +574,7 @@
 
     document.getElementById('totalVotes').textContent = grandTotal.toLocaleString();
 
-    container.querySelectorAll('.team-btn').forEach(btn => {
+    container.querySelectorAll('.team-btn:not(.locked)').forEach(btn => {
       btn.addEventListener('click', () => handleMatchVote(btn.dataset.id, btn.dataset.side));
     });
   }
