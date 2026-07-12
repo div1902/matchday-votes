@@ -390,24 +390,24 @@
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const MATCHES = [
+    { id:'m5', stage:'Semi-final', kickoff:'2026-07-14T19:00:00Z', venue:'Arlington',
+      a:{code:'FRA',name:'France',flag:'🇫🇷'}, b:{code:'ESP',name:'Spain',flag:'🇪🇸'},
+      result:null },
+    { id:'m6', stage:'Semi-final', kickoff:'2026-07-15T19:00:00Z', venue:'Atlanta',
+      a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+      result:null },
     { id:'m1', stage:'Quarter-final', kickoff:'2026-07-09T20:00:00Z', venue:'Foxborough',
       a:{code:'MAR',name:'Morocco',flag:'🇲🇦'}, b:{code:'FRA',name:'France',flag:'🇫🇷'},
       result:{ a:0, b:2 } },
     { id:'m2', stage:'Quarter-final', kickoff:'2026-07-10T19:00:00Z', venue:'Inglewood',
       a:{code:'ESP',name:'Spain',flag:'🇪🇸'}, b:{code:'BEL',name:'Belgium',flag:'🇧🇪'},
       result:{ a:2, b:1 } },
-    { id:'m3', stage:'Quarter-final', kickoff:'2026-07-11T21:00:00Z', venue:'Miami Gardens',
+    { id:'m3', stage:'Quarter-final', kickoff:'2026-07-11T17:00:00Z', venue:'Miami Gardens',
       a:{code:'NOR',name:'Norway',flag:'🇳🇴'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
-      result:null },
+      result:{ a:1, b:2 } },
     { id:'m4', stage:'Quarter-final', kickoff:'2026-07-12T01:00:00Z', venue:'Kansas City',
       a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'SUI',name:'Switzerland',flag:'🇨🇭'},
-      result:null },
-    { id:'m5', stage:'Semi-final', kickoff:'2026-07-14T19:00:00Z', venue:'Arlington',
-      a:{code:'FRA',name:'France',flag:'🇫🇷'}, b:{code:'ESP',name:'Spain',flag:'🇪🇸'},
-      result:null },
-    { id:'m6', stage:'Semi-final', kickoff:'2026-07-15T19:00:00Z', venue:'Atlanta',
-      a:{code:'TBD',name:'Norway/England winner',flag:'❓'}, b:{code:'TBD',name:'Argentina/Switzerland winner',flag:'❓'},
-      result:null }
+      result:{ a:3, b:1 } }
   ];
 
   function formatKickoff(iso){
