@@ -36,6 +36,17 @@
       radial-gradient(ellipse 900px 500px at 50% -10%, rgba(61,220,122,0.10), transparent 60%),
       repeating-linear-gradient(180deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 44px),
       var(--bg);
+    background-size: 140% 140%, 100% 100%, 100% 100%;
+    animation: ambientDrift 22s ease-in-out infinite;
+  }
+
+  @keyframes ambientDrift{
+    0%, 100%{ background-position: 50% -10%, 0 0, 0 0; }
+    50%{ background-position: 45% 0%, 0 0, 0 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    body{ animation: none; }
   }
 
   .wrap{ max-width: 680px; margin:0 auto; padding: 48px 20px 80px; }
@@ -140,6 +151,11 @@
   .match-card.finished{
     opacity: 0.96;
   }
+  .match-card.high-stakes{
+    border-color: rgba(242,201,76,0.3);
+    background: linear-gradient(165deg, var(--panel) 0%, rgba(242,201,76,0.04) 100%);
+  }
+  .match-card.high-stakes .stage{ color: var(--gold); }
   .team-btn.locked{
     cursor: default;
   }
@@ -313,6 +329,16 @@
   .player-chip .pname{ font-weight:600; }
   .player-chip .pvotes{ color: var(--text-faint); font-size:11.5px; }
   .player-chip.voted .pvotes{ color: var(--gold); }
+  .out-tag{
+    background: var(--panel-2);
+    color: var(--text-faint);
+    font-size: 8.5px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
 
   footer{
     text-align:center;
@@ -356,8 +382,8 @@
 <div class="wrap">
   <header>
     <span class="live-pill"><span class="live-dot"></span>live voting</span>
-    <h1>Who wins the<br><span>quarter-finals?</span></h1>
-    <p>Vote on every World Cup 2026 quarterfinal. Results update live from everyone voting right now — no account needed.</p>
+    <h1>Who lifts the<br><span>World Cup?</span></h1>
+    <p>Vote on the semifinal, the final, and the third-place playoff. Results update live from everyone voting right now — no account needed.</p>
     <div class="total-strip">
       <span><b id="totalVotes">–</b> total votes</span>
       <span><b id="totalMatches">4</b> matches live</span>
@@ -367,7 +393,7 @@
   <div class="matches" id="matchList"></div>
 
   <div class="section-title">Golden boot watch</div>
-  <div class="section-sub">Vote for who you think finishes as the tournament's best player.</div>
+  <div class="section-sub">Vote for who you think is playing best right now — legends who are already out are marked, vote for who impressed you most either way.</div>
   <div class="xg-panel">
     <div class="player-grid" id="playerGrid"></div>
   </div>
@@ -391,23 +417,17 @@
 
   const MATCHES = [
     { id:'m5', stage:'Semi-final', kickoff:'2026-07-14T19:00:00Z', venue:'Arlington',
-      a:{code:'FRA',name:'France',flag:'🇫🇷'}, b:{code:'ESP',name:'Spain',flag:'🇪🇸'},
-      result:null },
-    { id:'m6', stage:'Semi-final', kickoff:'2026-07-15T19:00:00Z', venue:'Atlanta',
-      a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
-      result:null },
-    { id:'m1', stage:'Quarter-final', kickoff:'2026-07-09T20:00:00Z', venue:'Foxborough',
-      a:{code:'MAR',name:'Morocco',flag:'🇲🇦'}, b:{code:'FRA',name:'France',flag:'🇫🇷'},
+      a:{code:'FRA',name:'France',flag:'🇫🇷', headStart:50}, b:{code:'ESP',name:'Spain',flag:'🇪🇸', headStart:50},
       result:{ a:0, b:2 } },
-    { id:'m2', stage:'Quarter-final', kickoff:'2026-07-10T19:00:00Z', venue:'Inglewood',
-      a:{code:'ESP',name:'Spain',flag:'🇪🇸'}, b:{code:'BEL',name:'Belgium',flag:'🇧🇪'},
-      result:{ a:2, b:1 } },
-    { id:'m3', stage:'Quarter-final', kickoff:'2026-07-11T17:00:00Z', venue:'Miami Gardens',
-      a:{code:'NOR',name:'Norway',flag:'🇳🇴'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
-      result:{ a:1, b:2 } },
-    { id:'m4', stage:'Quarter-final', kickoff:'2026-07-12T01:00:00Z', venue:'Kansas City',
-      a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'SUI',name:'Switzerland',flag:'🇨🇭'},
-      result:{ a:3, b:1 } }
+    { id:'m6', stage:'Semi-final', kickoff:'2026-07-15T19:00:00Z', venue:'Atlanta',
+      a:{code:'ARG',name:'Argentina',flag:'🇦🇷', headStart:50}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', headStart:50},
+      result:null },
+    { id:'mF', stage:'Final', kickoff:'2026-07-19T19:00:00Z', venue:'East Rutherford',
+      a:{code:'ESP',name:'Spain',flag:'🇪🇸', headStart:50}, b:{code:'TBD',name:'Argentina/England winner',flag:'❓', headStart:0},
+      result:null },
+    { id:'m3P', stage:'Third-place playoff', kickoff:'2026-07-18T21:00:00Z', venue:'Miami Gardens',
+      a:{code:'FRA',name:'France',flag:'🇫🇷', headStart:50}, b:{code:'TBD',name:'Argentina/England loser',flag:'❓', headStart:0},
+      result:null }
   ];
 
   function formatKickoff(iso){
@@ -437,11 +457,10 @@
   ];
 
   const XG_TEAMS = [
-    { id:'x1', name:'France' }, { id:'x2', name:'Norway' }, { id:'x3', name:'Argentina' }, { id:'x4', name:'Spain' }
+    { id:'x1', name:'Spain' }, { id:'x2', name:'England' }, { id:'x3', name:'Argentina' }, { id:'x4', name:'France' }
   ];
 
   const VOTER_KEY = 'matchday_voter_id';
-  const SEED_KEY_PREFIX = 'seeded_v1_';
 
   function getVoterId(){
     let id = localStorage.getItem(VOTER_KEY);
@@ -456,7 +475,24 @@
   function myVoteKey(kind, itemId){ return `myvote_${kind}_${itemId}`; }
 
   // Simple row-per-key store backed by Supabase: table "votes" (id text, count int)
+  // Bulk fetch: pull every row in one query instead of one round-trip per key.
+  // Massively reduces total network latency since round-trips, not payload size, are the bottleneck.
+  let voteCache = null;
+  async function loadAllVotes(){
+    const { data, error } = await sb.from('votes').select('id, count');
+    if (error){
+      console.error('Supabase bulk read error:', JSON.stringify(error, null, 2));
+      voteCache = {};
+      return;
+    }
+    voteCache = {};
+    for (const row of data){ voteCache[row.id] = row.count; }
+  }
+
   async function getRowValue(id, fallback){
+    if (voteCache && id in voteCache) return voteCache[id];
+    if (voteCache) return fallback; // cache loaded but row doesn't exist yet
+    // fallback path if cache somehow isn't ready (shouldn't normally happen)
     const { data, error } = await sb.from('votes').select('count').eq('id', id).maybeSingle();
     if (error){
       console.error('Supabase read error for id=' + id + ':', JSON.stringify(error, null, 2));
@@ -472,19 +508,24 @@
       console.error('Supabase write error for id=' + id + ':', JSON.stringify(error, null, 2));
       showToast('Vote failed — try again');
     }
+    if (voteCache) voteCache[id] = value; // keep cache in sync so re-renders reflect the new value instantly
   }
 
   async function ensureSeed(){ /* seeding now happens once via the SQL setup script */ }
 
   async function getCount(key, fallback){
     if (typeof fallback === 'object' && fallback !== null && 'a' in fallback){
-      const a = await getRowValue(key + '_a', fallback.a);
-      const b = await getRowValue(key + '_b', fallback.b);
+      const [a, b] = await Promise.all([
+        getRowValue(key + '_a', fallback.a),
+        getRowValue(key + '_b', fallback.b)
+      ]);
       return { a, b };
     }
     if (typeof fallback === 'object' && fallback !== null && 'sum' in fallback){
-      const sum = await getRowValue(key + '_sum', fallback.sum);
-      const count = await getRowValue(key + '_count', fallback.count);
+      const [sum, count] = await Promise.all([
+        getRowValue(key + '_sum', fallback.sum),
+        getRowValue(key + '_count', fallback.count)
+      ]);
       return { sum, count };
     }
     return await getRowValue(key, fallback);
@@ -510,7 +551,11 @@
 
     for (const m of MATCHES){
       const storeKey = `match_${m.id}`;
-      const counts = await getCount(storeKey, { a:0, b:0 });
+      const rawCounts = await getCount(storeKey, { a:0, b:0 });
+      const counts = {
+        a: rawCounts.a + (m.a.headStart || 0),
+        b: rawCounts.b + (m.b.headStart || 0)
+      };
       const total = counts.a + counts.b;
       grandTotal += total;
       const pctA = total > 0 ? Math.round((counts.a/total)*100) : 50;
@@ -531,11 +576,13 @@
       const fansCorrect = finished && winnerSide && total > 0 &&
         ((winnerSide === 'a' && pctA >= pctB) || (winnerSide === 'b' && pctB > pctA));
 
+      const isHighStakes = m.stage === 'Final' || m.stage === 'Third-place playoff';
+
       const card = document.createElement('div');
-      card.className = 'match-card' + (finished ? ' finished' : '');
+      card.className = 'match-card' + (finished ? ' finished' : '') + (isHighStakes ? ' high-stakes' : '');
       card.innerHTML = `
         <div class="match-meta">
-          <span class="stage">${m.stage}${kickoff.live && !finished ? ' <span class="live-tag">LIVE</span>' : ''}${finished ? ' <span class="final-tag">FINAL</span>' : ''}</span>
+          <span class="stage">${isHighStakes ? '🏆 ' : ''}${m.stage}${kickoff.live && !finished ? ' <span class="live-tag">LIVE</span>' : ''}${finished ? ' <span class="final-tag">FT</span>' : ''}</span>
           <span>${finished ? kickoff.label.split(' · likely live')[0].split(' · finished')[0] : kickoff.label} · ${m.venue}</span>
         </div>
         <div class="teams-row">
@@ -615,7 +662,7 @@
       const chip = document.createElement('div');
       chip.className = `player-chip ${myVote ? 'voted':''}`;
       chip.dataset.id = p.id;
-      chip.innerHTML = `<span class="pname">${p.name}</span><span class="pvotes">${count}</span>`;
+      chip.innerHTML = `<span class="pname">${p.name}${p.eliminated ? ' <span class="out-tag">out</span>' : ''}</span><span class="pvotes">${count}</span>`;
       chip.addEventListener('click', () => handlePlayerVote(p.id));
       grid.appendChild(chip);
     }
@@ -662,15 +709,17 @@
   }
 
   async function init(){
-    await renderMatches();
-    await renderPlayers();
-    await renderXg();
+    await loadAllVotes();
+    await Promise.all([ renderMatches(), renderPlayers(), renderXg() ]);
   }
 
   init();
 
   // light auto-refresh so votes from other people appear without a manual reload
-  setInterval(() => { renderMatches(); renderPlayers(); renderXg(); }, 15000);
+  setInterval(async () => {
+    await loadAllVotes();
+    Promise.all([ renderMatches(), renderPlayers(), renderXg() ]);
+  }, 15000);
 </script>
 
 <script defer src="/_vercel/insights/script.js"></script>
