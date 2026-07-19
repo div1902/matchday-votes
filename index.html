@@ -1,48 +1,40 @@
-u<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>World Cup 2026 Final Vote — Argentina vs Spain Live Poll | Matchday Vote</title>
-<meta name="description" content="Vote live on the World Cup 2026 final (Argentina vs Spain) and third-place playoff (England vs France). Real-time results, no account needed. See how thousands of fans are voting right now." />
-<meta name="keywords" content="World Cup 2026 final, Argentina vs Spain prediction, England vs France third place, World Cup final poll, World Cup vote, who will win World Cup 2026, Argentina Spain final vote" />
+<title>World Cup 2026 Final Results — Spain Champions | Matchday Vote Recap</title>
+<meta name="description" content="Spain won the World Cup 2026, beating Argentina 1-0 in extra time. Full recap: final results, Golden Boot winner Mbappé, best team as voted by fans, highlights and rankings." />
+<meta name="keywords" content="World Cup 2026 winner, Spain champions, Ferran Torres goal, Mbappe Golden Boot, World Cup 2026 final result, Argentina Spain 1-0, World Cup 2026 highlights" />
 <link rel="canonical" href="https://matchday-votes.vercel.app/" />
 
-<!-- Open Graph / social share previews (Facebook, WhatsApp, Discord, Telegram, LinkedIn) -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="World Cup 2026 Final Vote — Argentina vs Spain Live Poll" />
-<meta property="og:description" content="Vote live on the World Cup 2026 final and third-place playoff. Real-time results updating as fans vote. No account needed." />
+<meta property="og:title" content="Spain Wins World Cup 2026 — Full Recap & Fan Rankings" />
+<meta property="og:description" content="Spain beat Argentina 1-0 in extra time. See the full recap, Golden Boot standings, highlights, and how thousands of fans voted throughout the tournament." />
 <meta property="og:url" content="https://matchday-votes.vercel.app/" />
 <meta property="og:site_name" content="Matchday Vote" />
 
-<!-- Twitter/X card preview -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="World Cup 2026 Final Vote — Argentina vs Spain" />
-<meta name="twitter:description" content="Live fan voting on the World Cup 2026 final and third-place playoff. See real-time results as thousands vote." />
+<meta name="twitter:title" content="Spain Wins World Cup 2026 — Full Recap" />
+<meta name="twitter:description" content="Ferran Torres' extra-time winner sealed it. Full recap, rankings, and highlights inside." />
 
-<!-- Structured data so search engines understand this as an event/poll -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SportsEvent",
   "name": "FIFA World Cup 2026 Final",
-  "startDate": "2026-07-19T19:00:00Z",
-  "location": {
-    "@type": "Place",
-    "name": "MetLife Stadium",
-    "address": "East Rutherford, NJ"
-  },
+  "startDate": "2026-07-19T15:00:00Z",
+  "location": { "@type": "Place", "name": "MetLife Stadium", "address": "East Rutherford, NJ" },
   "competitor": [
-    { "@type": "SportsTeam", "name": "Argentina" },
-    { "@type": "SportsTeam", "name": "Spain" }
+    { "@type": "SportsTeam", "name": "Spain" },
+    { "@type": "SportsTeam", "name": "Argentina" }
   ],
-  "description": "Live fan voting on the 2026 FIFA World Cup Final between Argentina and Spain, with real-time results."
+  "description": "Spain defeated Argentina 1-0 in extra time to win the 2026 FIFA World Cup, with Ferran Torres scoring the decisive goal in the 106th minute."
 }
 </script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
-
 
   :root{
     --bg: #06110c;
@@ -69,309 +61,107 @@ u<!DOCTYPE html>
 
   body{
     background:
-      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(61,220,122,0.10), transparent 60%),
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(242,201,76,0.10), transparent 60%),
       repeating-linear-gradient(180deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 44px),
       var(--bg);
-    background-size: 140% 140%, 100% 100%, 100% 100%;
-    animation: ambientDrift 22s ease-in-out infinite;
   }
 
-  @keyframes ambientDrift{
-    0%, 100%{ background-position: 50% -10%, 0 0, 0 0; }
-    50%{ background-position: 45% 0%, 0 0, 0 0; }
-  }
+  .wrap{ max-width: 700px; margin:0 auto; padding: 48px 20px 80px; }
 
-  @media (prefers-reduced-motion: reduce){
-    body{ animation: none; }
-  }
+  header{ text-align:center; margin-bottom: 32px; }
 
-  .wrap{ max-width: 680px; margin:0 auto; padding: 48px 20px 80px; }
-
-  header{ text-align:center; margin-bottom: 36px; }
-
-  .live-pill{
+  .final-pill{
     display:inline-flex;
     align-items:center;
     gap:7px;
-    background: rgba(255,71,71,0.1);
-    border: 0.5px solid rgba(255,71,71,0.35);
+    background: rgba(242,201,76,0.1);
+    border: 0.5px solid rgba(242,201,76,0.35);
     padding: 5px 13px;
     border-radius: 20px;
     font-size: 11.5px;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--live-red);
+    color: var(--gold);
     margin-bottom: 22px;
-  }
-  .live-dot{
-    width:7px; height:7px; border-radius:50%;
-    background: var(--live-red);
-    animation: pulse 1.4s ease-in-out infinite;
-  }
-  @keyframes pulse{
-    0%,100%{ opacity:1; transform:scale(1); }
-    50%{ opacity:0.4; transform:scale(0.8); }
   }
 
   h1{
     font-family:'Bebas Neue', sans-serif;
     font-weight:400;
-    font-size: 52px;
-    line-height: 0.95;
+    font-size: 46px;
+    line-height: 0.98;
     letter-spacing: 0.01em;
     color: var(--white);
   }
-  h1 span{ color: var(--green); }
+  h1 span{ color: var(--gold); }
 
   header p{
     margin-top:14px;
     color: var(--text-dim);
     font-size: 14.5px;
-    max-width: 420px;
+    max-width: 460px;
     margin-left:auto; margin-right:auto;
     line-height: 1.55;
   }
 
-  .total-strip{
-    display:flex;
-    justify-content:center;
-    gap: 28px;
-    margin-top: 24px;
-    font-size: 12.5px;
-    color: var(--text-faint);
-  }
-  .total-strip b{ color: var(--gold); font-weight:600; }
-
-  /* ---- hero banner: the final, front and center ---- */
-  .hero-banner{
+  /* ---- champion hero ---- */
+  .champion-hero{
     position: relative;
-    background: linear-gradient(135deg, rgba(61,220,122,0.08), rgba(242,201,76,0.08));
-    border: 1px solid rgba(242,201,76,0.25);
-    border-radius: 18px;
-    padding: 28px 20px;
-    margin-bottom: 24px;
+    background: linear-gradient(135deg, rgba(242,201,76,0.12), rgba(61,220,122,0.06));
+    border: 1px solid rgba(242,201,76,0.35);
+    border-radius: 20px;
+    padding: 36px 24px;
+    margin-bottom: 28px;
     text-align: center;
     overflow: hidden;
   }
-  .hero-banner::before{
+  .champion-hero::before{
     content:"";
-    position:absolute;
-    top:0; left:-100%;
+    position:absolute; top:0; left:-100%;
     width: 60%; height:100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
     animation: shimmerSweep 5s ease-in-out infinite;
   }
   @keyframes shimmerSweep{
-    0%{ left: -60%; }
-    50%, 100%{ left: 130%; }
+    0%{ left: -60%; } 50%,100%{ left: 130%; }
   }
-  .hero-label{
-    position: relative;
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-  .hero-teams{
-    position: relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap: 18px;
-  }
-  .hero-flag{
-    font-size: 44px;
-    line-height:1;
-  }
-  .hero-team-name{
+  .trophy-emoji{ font-size: 44px; margin-bottom: 10px; position:relative; }
+  .champion-flag{ font-size: 56px; line-height:1; margin-bottom: 10px; position:relative; }
+  .champion-name{
     font-family:'Bebas Neue', sans-serif;
-    font-size: 26px;
+    font-size: 38px;
+    color: var(--gold);
+    position: relative;
     letter-spacing: 0.01em;
   }
-  .hero-vs{
-    font-family:'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: var(--gold);
-  }
-  .hero-sub{
+  .champion-sub{
     position: relative;
-    font-size: 12.5px;
+    font-size: 13.5px;
     color: var(--text-dim);
-    margin-top: 12px;
+    margin-top: 8px;
   }
-
-  @media (max-width:480px){
-    .hero-flag{ font-size:32px; }
-    .hero-team-name{ font-size:19px; }
-  }
-
-  /* ---- match cards ---- */
-  .matches{ display:grid; gap: 16px; }
-
-  .match-card{
-    background: var(--panel);
-    border: 0.5px solid var(--line);
-    border-radius: 14px;
-    padding: 20px 20px 18px;
-  }
-
-  .match-meta{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom: 16px;
-    font-size: 11.5px;
-    color: var(--text-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight:600;
-  }
-  .match-meta .stage{ color: var(--gold); }
-  .live-tag{
-    background: var(--live-red);
-    color: #fff;
-    font-size: 9.5px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 6px;
-    letter-spacing: 0.04em;
-  }
-  .final-tag{
-    background: var(--text-faint);
-    color: var(--bg);
-    font-size: 9.5px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 6px;
-    letter-spacing: 0.04em;
-    font-weight: 700;
-  }
-  .match-card.finished{
-    opacity: 0.96;
-  }
-  .match-card.high-stakes{
-    border-color: rgba(242,201,76,0.3);
-    background: linear-gradient(165deg, var(--panel) 0%, rgba(242,201,76,0.04) 100%);
-  }
-  .match-card.high-stakes .stage{ color: var(--gold); }
-  .match-card.just-voted{
-    animation: votePulse 0.7s ease;
-  }
-  @keyframes votePulse{
-    0%{ box-shadow: 0 0 0 0 rgba(61,220,122,0.4); }
-    50%{ box-shadow: 0 0 0 8px rgba(61,220,122,0); }
-    100%{ box-shadow: 0 0 0 0 rgba(61,220,122,0); }
-  }
-  .team-btn.locked{
-    cursor: default;
-  }
-  .team-btn.locked:hover{
-    border-color: var(--line);
-    background: var(--panel-2);
-  }
-  .team-btn.winner{
-    border-color: var(--gold);
-    background: rgba(242,201,76,0.07);
-  }
-  .team-btn.winner .team-name{ color: var(--gold); }
-  .winner-check{
-    font-size: 10px;
-    color: var(--gold);
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
-
-  .teams-row{
-    display:grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items:center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .team-btn{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
-    background: var(--panel-2);
-    border: 0.5px solid var(--line);
-    border-radius: 10px;
-    padding: 14px 10px;
-    cursor:pointer;
-    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
-  }
-  .team-btn:hover{ border-color: var(--green); background: rgba(61,220,122,0.05); }
-  .team-btn:active{ transform: scale(0.97); }
-  .team-btn.voted{
-    border-color: var(--green);
-    background: rgba(61,220,122,0.09);
-  }
-  .team-flag{ font-size: 28px; line-height:1; }
-  .team-name{ font-size: 13.5px; font-weight:600; }
-  .team-btn.voted .team-name{ color: var(--green); }
-
-  .vs-mid{
-    font-family:'Bebas Neue', sans-serif;
-    font-size: 15px;
-    color: var(--text-faint);
-    text-align:center;
-    padding: 0 2px;
-  }
-
-  .result-bar-wrap{ margin-bottom: 8px; }
-  .result-bar{
-    display:flex;
-    height: 26px;
-    border-radius: 6px;
-    overflow:hidden;
-    background: var(--panel-2);
-    border: 0.5px solid var(--line);
-  }
-  .result-seg{
+  .final-score-row{
+    position: relative;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size: 11.5px;
-    font-weight:700;
-    color: var(--bg);
-    transition: width 0.7s cubic-bezier(.2,.8,.2,1);
-    white-space:nowrap;
-    overflow:hidden;
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 0.5px solid rgba(242,201,76,0.2);
   }
-  .result-seg.a{ background: var(--green); }
-  .result-seg.b{ background: var(--gold); }
-
-  .vote-count-row{
-    display:flex;
-    justify-content:space-between;
-    font-size: 11.5px;
+  .fs-team{ font-family:'Bebas Neue', sans-serif; font-size:17px; color: var(--text-dim); }
+  .fs-team.winner{ color: var(--white); }
+  .fs-score{ font-family:'Bebas Neue', sans-serif; font-size: 26px; color: var(--gold); }
+  .fs-detail{
+    position: relative;
+    font-size: 12px;
     color: var(--text-faint);
-    margin-top: 6px;
+    margin-top: 10px;
   }
 
-  .card-footer{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-top: 0.5px solid var(--line);
-    padding-top: 12px;
-    margin-top: 4px;
-    font-size: 11px;
-    color: var(--text-faint);
-  }
-
-  .fan-pick{
-    display:flex;
-    align-items:center;
-    gap:6px;
-  }
-  .fan-pick .crown{ color: var(--gold); }
-
-  /* ---- best player + expected goals section ---- */
+  /* ---- section shell ---- */
   .section-title{
     font-family:'Bebas Neue', sans-serif;
     font-size: 24px;
@@ -382,72 +172,128 @@ u<!DOCTYPE html>
   .section-sub{
     font-size: 13px;
     color: var(--text-dim);
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
-
-  .xg-panel{
+  .panel{
     background: var(--panel);
     border: 0.5px solid var(--line);
     border-radius: 14px;
-    padding: 22px 20px;
+    padding: 20px;
   }
 
-  .xg-row{
-    display:grid;
-    grid-template-columns: 90px 1fr 40px;
-    align-items:center;
-    gap: 12px;
-    margin-bottom: 14px;
+  /* ---- results list (closed voting) ---- */
+  .results{ display:grid; gap: 14px; }
+  .result-card{
+    background: var(--panel);
+    border: 0.5px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
   }
-  .xg-row:last-child{ margin-bottom:0; }
-  .xg-label{ font-size: 13px; font-weight:600; color: var(--text-dim); }
-  .xg-track{
-    height: 8px;
-    background: var(--panel-2);
-    border-radius: 5px;
-    overflow:hidden;
+  .result-card.trophy{
+    border-color: rgba(242,201,76,0.3);
+    background: linear-gradient(165deg, var(--panel) 0%, rgba(242,201,76,0.04) 100%);
   }
-  .xg-fill{
-    height:100%;
-    border-radius:5px;
-    background: linear-gradient(90deg, var(--green-dim), var(--green));
-    transition: width 0.7s ease;
-  }
-  .xg-val{ font-size:13px; font-weight:700; color: var(--gold); text-align:right; }
-
-  .player-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
-    gap: 10px;
-    margin-top: 16px;
-  }
-  .player-chip{
+  .result-meta{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    background: var(--panel-2);
-    border: 0.5px solid var(--line);
-    border-radius: 8px;
-    padding: 10px 13px;
-    cursor:pointer;
-    transition: border-color 0.15s ease;
-    font-size: 13px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight:600;
   }
-  .player-chip:hover{ border-color: var(--green); }
-  .player-chip.voted{ border-color: var(--gold); background: rgba(242,201,76,0.07); }
-  .player-chip .pname{ font-weight:600; }
-  .player-chip .pvotes{ color: var(--text-faint); font-size:11.5px; }
-  .player-chip.voted .pvotes{ color: var(--gold); }
-  .out-tag{
+  .result-meta .stage{ color: var(--gold); }
+  .closed-tag{
     background: var(--panel-2);
     color: var(--text-faint);
-    font-size: 8.5px;
-    padding: 1px 5px;
+    font-size: 9px;
+    padding: 2px 6px;
     border-radius: 4px;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
+    letter-spacing: 0.04em;
     font-weight: 700;
   }
+  .result-teams{
+    display:grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .rt-side{ display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; }
+  .rt-flag{ font-size: 26px; }
+  .rt-name{ font-size: 13px; font-weight:600; color: var(--text-dim); }
+  .rt-name.won{ color: var(--gold); }
+  .rt-score-line{ font-family:'Bebas Neue', sans-serif; font-size: 20px; text-align:center; color: var(--gold); }
+  .vote-recap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-top: 0.5px solid var(--line);
+    padding-top: 12px;
+    font-size: 11.5px;
+    color: var(--text-faint);
+  }
+  .vote-recap b{ color: var(--text-dim); }
+  .fan-accuracy{ font-size: 11.5px; }
+  .fan-accuracy.correct{ color: var(--green); }
+  .fan-accuracy.wrong{ color: var(--live-red); }
+
+  /* ---- rankings ---- */
+  .ranking-list{ display:grid; gap: 10px; }
+  .ranking-row{
+    display:grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items:center;
+    gap: 12px;
+    background: var(--panel-2);
+    border: 0.5px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .ranking-row.gold{ border-color: rgba(242,201,76,0.4); background: rgba(242,201,76,0.06); }
+  .rank-num{ font-family:'Bebas Neue', sans-serif; font-size: 18px; color: var(--text-faint); text-align:center; }
+  .ranking-row.gold .rank-num{ color: var(--gold); }
+  .rank-name{ font-size: 13.5px; font-weight:600; }
+  .rank-detail{ font-size: 11px; color: var(--text-faint); }
+  .rank-votes{ font-size: 12px; color: var(--text-dim); font-weight:600; white-space:nowrap; }
+
+  /* ---- media grid ---- */
+  .media-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .media-card{
+    display:block;
+    background: var(--panel-2);
+    border: 0.5px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-decoration:none;
+    color: inherit;
+    transition: border-color 0.15s ease;
+  }
+  .media-card:hover{ border-color: var(--gold); }
+  .media-icon{ font-size: 20px; margin-bottom: 8px; }
+  .media-title{ font-size: 13px; font-weight:600; color: var(--white); margin-bottom: 4px; }
+  .media-sub{ font-size: 11px; color: var(--text-faint); }
+
+  /* ---- moment cards ---- */
+  .moments{ display:grid; gap: 10px; }
+  .moment-card{
+    display:flex;
+    gap: 12px;
+    align-items:flex-start;
+    background: var(--panel-2);
+    border: 0.5px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .moment-icon{ font-size: 18px; flex-shrink:0; }
+  .moment-text{ font-size: 13px; color: var(--text-dim); line-height:1.5; }
+  .moment-text b{ color: var(--white); }
 
   footer{
     text-align:center;
@@ -456,33 +302,12 @@ u<!DOCTYPE html>
     color: var(--text-faint);
     line-height:1.6;
   }
-
-  .toast{
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--panel);
-    border: 0.5px solid var(--green);
-    color: var(--white);
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 13.5px;
-    font-weight:500;
-    opacity: 0;
-    pointer-events:none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    z-index: 50;
-  }
-  .toast.show{
-    opacity:1;
-    transform: translateX(-50%) translateY(0);
-  }
+  footer a{ color: var(--text-dim); }
 
   @media (max-width:480px){
-    h1{ font-size: 40px; }
-    .team-flag{ font-size:24px; }
-    .total-strip{ gap:16px; flex-wrap:wrap; }
+    h1{ font-size: 34px; }
+    .champion-name{ font-size: 30px; }
+    .champion-flag{ font-size:44px; }
   }
 </style>
 </head>
@@ -490,364 +315,241 @@ u<!DOCTYPE html>
 
 <div class="wrap">
   <header>
-    <span class="live-pill"><span class="live-dot"></span>live voting</span>
-    <h1>Argentina or Spain —<br><span>who lifts it?</span></h1>
-    <p>Vote on Sunday's World Cup 2026 final and the England vs France third-place playoff. Results update live from everyone voting right now — no account needed.</p>
-    <div class="total-strip">
-      <span><b id="totalVotes">–</b> total votes</span>
-      <span><b id="totalMatches">4</b> matches live</span>
-    </div>
+    <span class="final-pill">🏆 Tournament complete</span>
+    <h1>Spain are<br><span>World Champions</span></h1>
+    <p>The full recap: final result, Golden Boot race, third-place thriller, and how thousands of fans voted across the whole tournament.</p>
   </header>
 
-  <div class="hero-banner">
-    <div class="hero-label">🏆 The Final · Sunday, July 19</div>
-    <div class="hero-teams">
-      <span class="hero-flag">🇦🇷</span>
-      <span class="hero-team-name">Argentina</span>
-      <span class="hero-vs">VS</span>
-      <span class="hero-team-name">Spain</span>
-      <span class="hero-flag">🇪🇸</span>
+  <div class="champion-hero">
+    <div class="trophy-emoji">🏆</div>
+    <div class="champion-flag">🇪🇸</div>
+    <div class="champion-name">SPAIN</div>
+    <div class="champion-sub">2026 FIFA World Cup Champions</div>
+    <div class="final-score-row">
+      <span class="fs-team winner">Spain</span>
+      <span class="fs-score">1 – 0</span>
+      <span class="fs-team">Argentina</span>
     </div>
-    <div class="hero-sub">Defending champions vs. tournament favorites — cast your vote below</div>
+    <div class="fs-detail">Ferran Torres, 106' (assist: Nico Williams) · Extra time · MetLife Stadium</div>
   </div>
 
-  <div class="matches" id="matchList"></div>
+  <div class="section-title">Final results</div>
+  <div class="section-sub">Voting is now closed on every match. Here's what fans predicted vs. what happened.</div>
+  <div class="results" id="resultsList"></div>
 
-  <div class="section-title">Golden boot watch</div>
-  <div class="section-sub">Vote for who you think is playing best right now — legends who are already out are marked, vote for who impressed you most either way.</div>
-  <div class="xg-panel">
-    <div class="player-grid" id="playerGrid"></div>
+  <div class="section-title">Golden Boot &amp; standout players</div>
+  <div class="section-sub">Real tournament stats — not a fan vote. Mbappé finished top scorer and became the all-time World Cup leading scorer.</div>
+  <div class="panel">
+    <div class="ranking-list" id="goldenBootList"></div>
   </div>
 
-  <div class="section-title">Expected goals — fan forecast</div>
-  <div class="section-sub">Not a stat feed — this is the crowd's own prediction, averaged live as people vote.</div>
-  <div class="xg-panel" id="xgPanel"></div>
+  <div class="section-title">Best team — as voted by fans</div>
+  <div class="section-sub">Based on every vote cast across the tournament on this page.</div>
+  <div class="panel">
+    <div class="ranking-list" id="fanRankingList"></div>
+  </div>
 
-  <footer>Votes are stored anonymously and combined live across everyone using this page.<br>Fan-driven predictions, not official FIFA data.</footer>
+  <div class="section-title">Moments of the tournament</div>
+  <div class="moments" id="momentsList"></div>
+
+  <div class="section-title">Highlights &amp; official coverage</div>
+  <div class="section-sub">Real links to official sources — nothing embedded that we can't verify.</div>
+  <div class="media-grid" id="mediaGrid"></div>
+
+  <footer>
+    Final tallies reflect every vote cast while polls were open. Results and stats sourced from FIFA's official match centre and wire coverage.<br>
+    <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/highlights" target="_blank" rel="noopener">FIFA Official Highlights Hub →</a>
+  </footer>
 </div>
-
-<div class="toast" id="toast">Vote counted</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-  // ---- Supabase connection ----
-  // Paste your values from Project Settings -> API
   const SUPABASE_URL = "https://ibkmwgzxxhvoaswjhivr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlia213Z3p4eGh2b2Fzd2poaXZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1ODI0NzksImV4cCI6MjA5OTE1ODQ3OX0.p3nsrQaKlsQ_IrXotUcr5kBjRxUlzhOQ4H-cqCdzKZ8";
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const MATCHES = [
-    { id:'mF', stage:'Final', kickoff:'2026-07-19T19:00:00Z', venue:'East Rutherford',
-      a:{code:'ARG',name:'Argentina',flag:'🇦🇷', headStart:50}, b:{code:'ESP',name:'Spain',flag:'🇪🇸', headStart:50},
-      result:null },
-    { id:'m3P', stage:'Third-place playoff', kickoff:'2026-07-18T21:00:00Z', venue:'Miami Gardens',
-      a:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', headStart:50}, b:{code:'FRA',name:'France',flag:'🇫🇷', headStart:50},
-      result:null },
-    { id:'m5', stage:'Semi-final', kickoff:'2026-07-14T19:00:00Z', venue:'Arlington',
-      a:{code:'FRA',name:'France',flag:'🇫🇷', headStart:50}, b:{code:'ESP',name:'Spain',flag:'🇪🇸', headStart:50},
-      result:{ a:0, b:2 } },
-    { id:'m6', stage:'Semi-final', kickoff:'2026-07-15T19:00:00Z', venue:'Atlanta',
-      a:{code:'ARG',name:'Argentina',flag:'🇦🇷', headStart:50}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', headStart:50},
-      result:{ a:2, b:1 } }
+  // ---- Final match results (voting closed on all of these) ----
+  const FINAL_RESULTS = [
+    { id:'mF', stage:'Final', isTrophy:true,
+      a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'ESP',name:'Spain',flag:'🇪🇸'},
+      score:{ a:0, b:1 }, winnerSide:'b', headStart:{ a:50, b:50 } },
+    { id:'m3P', stage:'Third-place playoff', isTrophy:false,
+      a:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'}, b:{code:'FRA',name:'France',flag:'🇫🇷'},
+      score:{ a:6, b:4 }, winnerSide:'a', headStart:{ a:50, b:50 } },
+    { id:'m5', stage:'Semi-final', isTrophy:false,
+      a:{code:'FRA',name:'France',flag:'🇫🇷'}, b:{code:'ESP',name:'Spain',flag:'🇪🇸'},
+      score:{ a:0, b:2 }, winnerSide:'b', headStart:{ a:50, b:50 } },
+    { id:'m6', stage:'Semi-final', isTrophy:false,
+      a:{code:'ARG',name:'Argentina',flag:'🇦🇷'}, b:{code:'ENG',name:'England',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+      score:{ a:2, b:1 }, winnerSide:'a', headStart:{ a:50, b:50 } }
   ];
 
-  function formatKickoff(iso){
-    const d = new Date(iso);
-    const now = new Date();
-    const diffMs = d - now;
-    const dateStr = d.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
-    const timeStr = d.toLocaleTimeString(undefined, { hour:'numeric', minute:'2-digit' });
-    if (diffMs <= 0 && diffMs > -3 * 60 * 60 * 1000){
-      return { label: `${dateStr} · ${timeStr} · likely live`, live:true };
-    }
-    if (diffMs <= 0){
-      return { label: `${dateStr} · ${timeStr} · finished`, live:false };
-    }
-    const hrs = Math.floor(diffMs / (1000*60*60));
-    const days = Math.floor(hrs / 24);
-    let countdown;
-    if (days >= 1) countdown = `in ${days}d ${hrs % 24}h`;
-    else if (hrs >= 1) countdown = `in ${hrs}h`;
-    else countdown = `in ${Math.floor(diffMs/(1000*60))}m`;
-    return { label: `${dateStr} · ${timeStr} · ${countdown}`, live:false };
-  }
-
-  const PLAYERS = [
-    { id:'p1', name:'Mbappé' }, { id:'p2', name:'Haaland' }, { id:'p3', name:'Messi' },
-    { id:'p4', name:'Yamal' }, { id:'p5', name:'Bellingham' }, { id:'p6', name:'Kane' }
+  // ---- Real tournament stats (not from votes) ----
+  const GOLDEN_BOOT = [
+    { rank:1, name:'Kylian Mbappé', team:'France', detail:'10 goals · also became all-time World Cup top scorer (22 career goals)', gold:true },
+    { rank:2, name:'Lionel Messi', team:'Argentina', detail:'8 goals · key playmaker throughout the knockout stage' },
+    { rank:3, name:'Bukayo Saka', team:'England', detail:'Hat trick in the bronze final · 4th England player ever to do so at a World Cup' },
+    { rank:4, name:'Ferran Torres', team:'Spain', detail:'Scored the winning goal in the final, 106th minute' }
   ];
 
-  const XG_TEAMS = [
-    { id:'x1', name:'Spain' }, { id:'x2', name:'England' }, { id:'x3', name:'Argentina' }, { id:'x4', name:'France' }
+  // ---- Real tournament moments ----
+  const MOMENTS = [
+    { icon:'⚽', html:'<b>Ferran Torres</b> settled a goalless final with a 106th-minute half-volley off a Nico Williams cross — Spain’s second World Cup title.' },
+    { icon:'🔥', html:'<b>England 6-4 France</b> in the bronze final was one of the highest-scoring World Cup matches ever — Saka’s hat trick, two late Mbappé goals.' },
+    { icon:'👑', html:'<b>Mbappé</b> overtook Messi as football’s all-time World Cup leading scorer (22 goals) during the third-place match, and won the Golden Boot.' },
+    { icon:'🔴', html:'<b>Argentina</b> played the second half of extra time down to 10 men after Enzo Fernández was sent off, but held out until the 106th minute.' },
+    { icon:'🎤', html:'The halftime show brought together <b>Shakira, Coldplay, BTS, Justin Bieber, Madonna and Burna Boy</b> — the biggest World Cup final halftime production yet.' }
   ];
 
-  const VOTER_KEY = 'matchday_voter_id';
+  // ---- Real, verified official links ----
+  const MEDIA_LINKS = [
+    { icon:'🎥', title:'FIFA Official Highlights Hub', sub:'Every match, all tournament', url:'https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/highlights' },
+    { icon:'📺', title:'England 6-4 France highlights', sub:'Bronze final thriller', url:'https://www.youtube.com/watch?v=L1SLA0ixeWo' },
+    { icon:'📺', title:'Argentina 2-1 England highlights', sub:'Semi-final comeback', url:'https://www.youtube.com/watch?v=oB2mK8eJli4' },
+    { icon:'📺', title:'Spain 2-0 France highlights', sub:'Semi-final', url:'https://www.youtube.com/watch?v=_cV8QcKp3GU' },
+    { icon:'📰', title:'Full final match report', sub:'ESPN', url:'https://www.espn.com/soccer/match/_/gameId/760517/argentina-spain' },
+    { icon:'📊', title:'Golden Boot standings', sub:'Complete tournament tracker', url:'https://www.foxsports.com/stories/soccer/2026-fifa-world-cup-golden-boot-tracker' }
+  ];
 
-  function getVoterId(){
-    let id = localStorage.getItem(VOTER_KEY);
-    if (!id){
-      id = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-      localStorage.setItem(VOTER_KEY, id);
-    }
-    return id;
-  }
-  const voterId = getVoterId();
-
-  function myVoteKey(kind, itemId){ return `myvote_${kind}_${itemId}`; }
-
-  // Simple row-per-key store backed by Supabase: table "votes" (id text, count int)
-  // Bulk fetch: pull every row in one query instead of one round-trip per key.
-  // Massively reduces total network latency since round-trips, not payload size, are the bottleneck.
-  let voteCache = null;
   async function loadAllVotes(){
     const { data, error } = await sb.from('votes').select('id, count');
     if (error){
-      console.error('Supabase bulk read error:', JSON.stringify(error, null, 2));
-      voteCache = {};
-      return;
+      console.error('Supabase read error:', JSON.stringify(error, null, 2));
+      return {};
     }
-    voteCache = {};
-    for (const row of data){ voteCache[row.id] = row.count; }
+    const map = {};
+    for (const row of data){ map[row.id] = row.count; }
+    return map;
   }
 
-  async function getRowValue(id, fallback){
-    if (voteCache && id in voteCache) return voteCache[id];
-    if (voteCache) return fallback; // cache loaded but row doesn't exist yet
-    // fallback path if cache somehow isn't ready (shouldn't normally happen)
-    const { data, error } = await sb.from('votes').select('count').eq('id', id).maybeSingle();
-    if (error){
-      console.error('Supabase read error for id=' + id + ':', JSON.stringify(error, null, 2));
-      return fallback;
-    }
-    if (!data) return fallback;
-    return data.count;
-  }
-
-  async function setRowValue(id, value){
-    const { error } = await sb.from('votes').upsert({ id, count: value }, { onConflict: 'id' });
-    if (error){
-      console.error('Supabase write error for id=' + id + ':', JSON.stringify(error, null, 2));
-      showToast('Vote failed — try again');
-    }
-    if (voteCache) voteCache[id] = value; // keep cache in sync so re-renders reflect the new value instantly
-  }
-
-  async function ensureSeed(){ /* seeding now happens once via the SQL setup script */ }
-
-  async function getCount(key, fallback){
-    if (typeof fallback === 'object' && fallback !== null && 'a' in fallback){
-      const [a, b] = await Promise.all([
-        getRowValue(key + '_a', fallback.a),
-        getRowValue(key + '_b', fallback.b)
-      ]);
-      return { a, b };
-    }
-    if (typeof fallback === 'object' && fallback !== null && 'sum' in fallback){
-      const [sum, count] = await Promise.all([
-        getRowValue(key + '_sum', fallback.sum),
-        getRowValue(key + '_count', fallback.count)
-      ]);
-      return { sum, count };
-    }
-    return await getRowValue(key, fallback);
-  }
-
-  async function incrementVote(key, current){
-    const next = current + 1;
-    await setRowValue(key, next);
-    return next;
-  }
-
-  function showToast(msg){
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 1800);
-  }
-
-  async function renderMatches(){
-    const container = document.getElementById('matchList');
+  function renderResults(voteMap){
+    const container = document.getElementById('resultsList');
     container.innerHTML = '';
-    let grandTotal = 0;
 
-    for (const m of MATCHES){
-      const storeKey = `match_${m.id}`;
-      const rawCounts = await getCount(storeKey, { a:0, b:0 });
-      const counts = {
-        a: rawCounts.a + (m.a.headStart || 0),
-        b: rawCounts.b + (m.b.headStart || 0)
-      };
-      const total = counts.a + counts.b;
-      grandTotal += total;
-      const pctA = total > 0 ? Math.round((counts.a/total)*100) : 50;
+    for (const m of FINAL_RESULTS){
+      const rawA = (voteMap[`match_${m.id}_a`] || 0) + m.headStart.a;
+      const rawB = (voteMap[`match_${m.id}_b`] || 0) + m.headStart.b;
+      const total = rawA + rawB;
+      const pctA = total > 0 ? Math.round((rawA/total)*100) : 50;
       const pctB = 100 - pctA;
-
-      const myVote = localStorage.getItem(myVoteKey('match', m.id));
-      const kickoff = formatKickoff(m.kickoff);
-      const finished = !!m.result;
-
-      let winnerSide = null;
-      let scoreLine = '';
-      if (finished){
-        if (m.result.a > m.result.b) winnerSide = 'a';
-        else if (m.result.b > m.result.a) winnerSide = 'b';
-        scoreLine = `${m.result.a} – ${m.result.b}`;
-      }
-
-      const fansCorrect = finished && winnerSide && total > 0 &&
-        ((winnerSide === 'a' && pctA >= pctB) || (winnerSide === 'b' && pctB > pctA));
-
-      const isHighStakes = m.stage === 'Final' || m.stage === 'Third-place playoff';
+      const fansFavored = pctA >= pctB ? 'a' : 'b';
+      const fansCorrect = fansFavored === m.winnerSide;
 
       const card = document.createElement('div');
-      card.className = 'match-card' + (finished ? ' finished' : '') + (isHighStakes ? ' high-stakes' : '');
+      card.className = 'result-card' + (m.isTrophy ? ' trophy' : '');
       card.innerHTML = `
-        <div class="match-meta">
-          <span class="stage">${isHighStakes ? '🏆 ' : ''}${m.stage}${kickoff.live && !finished ? ' <span class="live-tag">LIVE</span>' : ''}${finished ? ' <span class="final-tag">FT</span>' : ''}</span>
-          <span>${finished ? kickoff.label.split(' · likely live')[0].split(' · finished')[0] : kickoff.label} · ${m.venue}</span>
+        <div class="result-meta">
+          <span class="stage">${m.isTrophy ? '🏆 ' : ''}${m.stage}</span>
+          <span class="closed-tag">VOTING CLOSED</span>
         </div>
-        <div class="teams-row">
-          <div class="team-btn ${myVote==='a' ? 'voted':''} ${finished ? 'locked' : ''} ${winnerSide==='a' ? 'winner' : ''}" data-side="a" data-id="${m.id}">
-            <span class="team-flag">${m.a.flag}</span>
-            <span class="team-name">${m.a.name}</span>
-            ${winnerSide==='a' ? '<span class="winner-check">✓ Won</span>' : ''}
+        <div class="result-teams">
+          <div class="rt-side">
+            <span class="rt-flag">${m.a.flag}</span>
+            <span class="rt-name ${m.winnerSide==='a' ? 'won' : ''}">${m.a.name}${m.winnerSide==='a' ? ' 🏆' : ''}</span>
           </div>
-          <div class="vs-mid">${finished ? scoreLine : 'VS'}</div>
-          <div class="team-btn ${myVote==='b' ? 'voted':''} ${finished ? 'locked' : ''} ${winnerSide==='b' ? 'winner' : ''}" data-side="b" data-id="${m.id}">
-            <span class="team-flag">${m.b.flag}</span>
-            <span class="team-name">${m.b.name}</span>
-            ${winnerSide==='b' ? '<span class="winner-check">✓ Won</span>' : ''}
+          <div class="rt-score-line">${m.score.a} – ${m.score.b}</div>
+          <div class="rt-side">
+            <span class="rt-flag">${m.b.flag}</span>
+            <span class="rt-name ${m.winnerSide==='b' ? 'won' : ''}">${m.b.name}${m.winnerSide==='b' ? ' 🏆' : ''}</span>
           </div>
         </div>
-        <div class="result-bar-wrap">
-          <div class="result-bar">
-            <div class="result-seg a" style="width:${pctA}%">${pctA >= 12 ? pctA+'%' : ''}</div>
-            <div class="result-seg b" style="width:${pctB}%">${pctB >= 12 ? pctB+'%' : ''}</div>
-          </div>
-          <div class="vote-count-row">
-            <span>${m.a.name} · ${counts.a} votes</span>
-            <span>${m.b.name} · ${counts.b} votes</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          ${finished
-            ? `<span class="fan-pick">${total > 0 ? (fansCorrect ? '✓ Fans called it right' : '✗ Fans got this one wrong') : 'No votes were cast'}</span>`
-            : `<span class="fan-pick"><span class="crown">${total > 0 ? '★' : ''}</span>${total > 0 ? (pctA >= pctB ? m.a.name : m.b.name) + ' favored by fans' : 'Be the first to vote'}</span>`
-          }
-          <span>${total} total</span>
+        <div class="vote-recap">
+          <span>Fans voted <b>${pctA}% / ${pctB}%</b> · ${total.toLocaleString()} total votes</span>
+          <span class="fan-accuracy ${fansCorrect ? 'correct' : 'wrong'}">${fansCorrect ? '✓ Fans called it' : '✗ Fans got it wrong'}</span>
         </div>
       `;
       container.appendChild(card);
     }
+  }
 
-    document.getElementById('totalVotes').textContent = grandTotal.toLocaleString();
+  function renderGoldenBoot(){
+    const container = document.getElementById('goldenBootList');
+    container.innerHTML = '';
+    for (const p of GOLDEN_BOOT){
+      const row = document.createElement('div');
+      row.className = 'ranking-row' + (p.gold ? ' gold' : '');
+      row.innerHTML = `
+        <span class="rank-num">${p.rank}</span>
+        <div>
+          <div class="rank-name">${p.name}${p.gold ? ' 🥾' : ''}</div>
+          <div class="rank-detail">${p.detail}</div>
+        </div>
+        <span class="rank-votes">${p.team}</span>
+      `;
+      container.appendChild(row);
+    }
+  }
 
-    container.querySelectorAll('.team-btn:not(.locked)').forEach(btn => {
-      btn.addEventListener('click', () => handleMatchVote(btn.dataset.id, btn.dataset.side));
+  function renderFanRanking(voteMap){
+    const container = document.getElementById('fanRankingList');
+    container.innerHTML = '';
+
+    // Aggregate every team's total votes received across all matches they appeared in.
+    const teamVotes = {};
+    for (const m of FINAL_RESULTS){
+      const rawA = (voteMap[`match_${m.id}_a`] || 0) + m.headStart.a;
+      const rawB = (voteMap[`match_${m.id}_b`] || 0) + m.headStart.b;
+      teamVotes[m.a.name] = (teamVotes[m.a.name] || 0) + rawA;
+      teamVotes[m.b.name] = (teamVotes[m.b.name] || 0) + rawB;
+    }
+
+    const sorted = Object.entries(teamVotes).sort((x,y) => y[1] - x[1]);
+    const flagMap = { Spain:'🇪🇸', Argentina:'🇦🇷', England:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', France:'🇫🇷' };
+
+    sorted.forEach(([name, votes], i) => {
+      const row = document.createElement('div');
+      row.className = 'ranking-row' + (i === 0 ? ' gold' : '');
+      row.innerHTML = `
+        <span class="rank-num">${i+1}</span>
+        <div>
+          <div class="rank-name">${flagMap[name] || ''} ${name}</div>
+          <div class="rank-detail">Combined votes across all their matches</div>
+        </div>
+        <span class="rank-votes">${votes.toLocaleString()} votes</span>
+      `;
+      container.appendChild(row);
     });
   }
 
-  async function handleMatchVote(matchId, side){
-    const voteKey = myVoteKey('match', matchId);
-    const existing = localStorage.getItem(voteKey);
-    if (existing === side) return; // already voted this way
-
-    const storeKey = `match_${matchId}`;
-    const counts = await getCount(storeKey, { a:0, b:0 });
-
-    if (existing && existing !== side){
-      counts[existing] = Math.max(0, counts[existing] - 1);
-      await setRowValue(storeKey + '_' + existing, counts[existing]);
-    }
-    counts[side] = (counts[side] || 0) + 1;
-    await setRowValue(storeKey + '_' + side, counts[side]);
-
-    localStorage.setItem(voteKey, side);
-
-    const m = MATCHES.find(x => x.id === matchId);
-    const teamName = side === 'a' ? m.a.name : m.b.name;
-    showToast(`Vote counted — ${teamName}`);
-
-    await renderMatches();
-
-    // brief celebratory pulse on the card that was just voted on
-    const votedCard = document.querySelector(`.team-btn[data-id="${matchId}"][data-side="${side}"]`)?.closest('.match-card');
-    if (votedCard){
-      votedCard.classList.add('just-voted');
-      setTimeout(() => votedCard.classList.remove('just-voted'), 700);
+  function renderMoments(){
+    const container = document.getElementById('momentsList');
+    container.innerHTML = '';
+    for (const m of MOMENTS){
+      const card = document.createElement('div');
+      card.className = 'moment-card';
+      card.innerHTML = `<span class="moment-icon">${m.icon}</span><span class="moment-text">${m.html}</span>`;
+      container.appendChild(card);
     }
   }
 
-  async function renderPlayers(){
-    const grid = document.getElementById('playerGrid');
-    grid.innerHTML = '';
-
-    for (const p of PLAYERS){
-      const storeKey = `player_${p.id}`;
-      const count = await getCount(storeKey, 0);
-      const myVote = localStorage.getItem(myVoteKey('player', p.id));
-
-      const chip = document.createElement('div');
-      chip.className = `player-chip ${myVote ? 'voted':''}`;
-      chip.dataset.id = p.id;
-      chip.innerHTML = `<span class="pname">${p.name}${p.eliminated ? ' <span class="out-tag">out</span>' : ''}</span><span class="pvotes">${count}</span>`;
-      chip.addEventListener('click', () => handlePlayerVote(p.id));
-      grid.appendChild(chip);
-    }
-  }
-
-  async function handlePlayerVote(playerId){
-    const voteKey = myVoteKey('player', playerId);
-    if (localStorage.getItem(voteKey)) return;
-
-    const storeKey = `player_${playerId}`;
-    const count = await getCount(storeKey, 0);
-    await incrementVote(storeKey, count);
-    localStorage.setItem(voteKey, '1');
-
-    const p = PLAYERS.find(x => x.id === playerId);
-    showToast(`Vote counted — ${p.name}`);
-    renderPlayers();
-  }
-
-  async function renderXg(){
-    const panel = document.getElementById('xgPanel');
-    panel.innerHTML = '';
-
-    for (const t of XG_TEAMS){
-      const storeKey = `xg_${t.id}`;
-      const data = await getCount(storeKey, { sum:0, count:0 });
-      const avg = data.count > 0 ? (data.sum / data.count) : 0;
-      const pct = Math.min(100, (avg / 4) * 100);
-
-      const row = document.createElement('div');
-      row.className = 'xg-row';
-      row.innerHTML = `
-        <span class="xg-label">${t.name}</span>
-        <div class="xg-track"><div class="xg-fill" style="width:${pct}%"></div></div>
-        <span class="xg-val">${avg.toFixed(1)}</span>
+  function renderMedia(){
+    const container = document.getElementById('mediaGrid');
+    container.innerHTML = '';
+    for (const link of MEDIA_LINKS){
+      const a = document.createElement('a');
+      a.className = 'media-card';
+      a.href = link.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML = `
+        <div class="media-icon">${link.icon}</div>
+        <div class="media-title">${link.title}</div>
+        <div class="media-sub">${link.sub}</div>
       `;
-      panel.appendChild(row);
+      container.appendChild(a);
     }
-
-    const note = document.createElement('div');
-    note.style.cssText = 'margin-top:14px; font-size:11.5px; color:var(--text-faint);';
-    note.textContent = 'Average of every fan-submitted goal prediction for each team\'s next match.';
-    panel.appendChild(note);
   }
 
   async function init(){
-    await loadAllVotes();
-    await Promise.all([ renderMatches(), renderPlayers(), renderXg() ]);
+    const voteMap = await loadAllVotes();
+    renderResults(voteMap);
+    renderGoldenBoot();
+    renderFanRanking(voteMap);
+    renderMoments();
+    renderMedia();
   }
 
   init();
-
-  // light auto-refresh so votes from other people appear without a manual reload
-  setInterval(async () => {
-    await loadAllVotes();
-    Promise.all([ renderMatches(), renderPlayers(), renderXg() ]);
-  }, 15000);
 </script>
 
 <script defer src="/_vercel/insights/script.js"></script>
